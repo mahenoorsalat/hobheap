@@ -16,11 +16,15 @@ jobs:
               run: |
                 git config --global user.name "github-actions[bot]"
                 git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                
+
             - name: Remove experiments folder
               run: |
                 if [ -d "server/experiments" ]; then
+                    git checkout ${{ github.head_ref }}
+
                     git rm -r server/experiments/
-                    git commit -m "Auto-remove experiments folder for main" || exit 0
-                    git push
+                    git commit -m "Auto-remove experiments folder for main"
+                    git push origin ${{ github.head_ref }}
+                else
+                  echo "No experiments folder found"
                 fi
